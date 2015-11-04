@@ -39,19 +39,27 @@ public class ContainerBagTest {
     }
     
     @Test
-    public void testSet2Container() {
-        Item item4 = new Item("","Тетрадка1",2);
-        Item item5 = new Item("","Тетрадка2",2);
-        Item item6 = new Item("","Тетрадка3",2);
-        Item item7 = new Item("","Тетрадка2",2);
-        Item item8 = new Item("","Тетрадка3",2);
-        Bag bag1 = new Bag("",6,0.4f);
-        bag1.add(item4);
-        Box box1=new Box("",3,0.4f);
-        box1.add(item5);
+    public void testAllContainer() {
+        Item item4 = new Item("Тетрадка1","Плоский",2);
+        Item item5 = new Item("Тетрадка2","Плоский",2);
+        Item item6 = new Item("Тетрадка3","Плоский",2);
+        Item item7 = new Item("Блокнот","Плоский",2);
+        Item item8 = new Item("Листок","Плоский",2);
+        Box box = new Box("Коробка1",100,1);
+        Stack stack = new Stack("Придмет",5);
+        bag.add(item1);
+        bag.add(item2);
+        bag.add(item3);
+        bag.add(box);
         
-        float expResult = 15.4F;
-        float result = bag1.getWeight();
+        box.add(item4);
+        box.add(stack);
+        stack.add(item5);
+        stack.add(item6);
+        stack.add(item7);
+        //stack.add(item8);
+        float expResult = 15.2F;
+        float result = bag.getWeight();
         assertEquals(expResult, result, 0.0);
     }
     
