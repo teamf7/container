@@ -9,6 +9,7 @@ import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 
 /**
@@ -17,7 +18,7 @@ import static org.junit.Assert.*;
  */
 public class ContainerBagTest {
 
-    Container bag;
+    Bag bag;
     Item item1;
     Item item2;
     Item item3;
@@ -38,12 +39,13 @@ public class ContainerBagTest {
         bag.clear();
     }
     
-    @Test
+    
+    @Test(expected = UnsupportedOperationException.class)
     public void testAllContainer() {
         Item item4 = new Item("Тетрадка1","Плоский",2);
         Item item5 = new Item("Тетрадка2","Плоский",2);
         Item item6 = new Item("Тетрадка3","Плоский",2);
-        Item item7 = new Item("Блокнот","Плоский",2);
+        Item item7 = new Item("Блокнот","Плоский",20);
         Item item8 = new Item("Листок","Плоский",2);
         Box box = new Box("Коробка1",100,1);
         Stack stack = new Stack("Придмет",5);
@@ -53,12 +55,12 @@ public class ContainerBagTest {
         bag.add(box);
         
         box.add(item4);
-        box.add(stack);
-        stack.add(item5);
-        stack.add(item6);
-        stack.add(item7);
+        //box.add(stack);
+        //stack.add(item5);
+        //stack.add(item6);
+        //stack.add(item7);
         //stack.add(item8);
-        float expResult = 15.2F;
+        float expResult = 7.2F;
         float result = bag.getWeight();
         assertEquals(expResult, result, 0.0);
     }
@@ -69,10 +71,11 @@ public class ContainerBagTest {
         bag.add(item1);
         bag.add(item2);
         Item expResult = item1;
-        Item result = bag.get();
+        Item result = (Item)bag.get();
         assertEquals(expResult, result);
 
     }
+    
      @Test
     public void testGetWeight() {
         System.out.println("Test: getWeight");
@@ -91,7 +94,11 @@ public class ContainerBagTest {
         bag.add(item1);
         bag.add(item2);
         Item expResult = item1;
-        Item result = bag.get(i);
+        Item result = (Item)bag.get(i);
+        assertEquals(expResult, result);
+        i=1;
+        expResult = item2;
+        result = (Item)bag.get(i);
         assertEquals(expResult, result);
     }
     
@@ -107,21 +114,22 @@ public class ContainerBagTest {
     public void testIsHaveWeight() {
         System.out.println("Test: isFull");
         boolean expResult = true;
-        boolean result = bag.isHaveWeight();
+        boolean result = bag.isHaveWeight(item1);
         assertEquals(expResult, result);
     } 
 
     
-    @Test(expected = ArrayStoreException.class)
+    @Test
     public void testCorrectAddItem() {
-        System.out.println("Test: testCorrectAddItem()");
+        System.out.println("Test: testCorrectAddItem");
+        
         bag.add(item1);
         bag.add(item2);
-        bag.add(item3);
+        bag.add(item3);//6
         Container bag1 = new Bag("Мешок2",14,1.2f);
-        bag.add(bag1);
-        bag1.add(item1);
-        bag.add(item1);
+        bag.add(bag1);//7,4
+       
+        System.out.println(bag.getWeight());
     }
 
     @Test
@@ -131,29 +139,33 @@ public class ContainerBagTest {
         bag.add(item2);
         bag.add(item3);
         Container bag1 = new Bag("Мешок2", 12, 1f);
-        bag.add(bag1);
         Item item5 = new Item("Плитка5", "Плоская", 2);
         bag1.add(item5);
+        bag.add(bag1);
         assertTrue(bag.getWeight() == 9.2f);
     }
-@Test (expected = ArrayIndexOutOfBoundsException.class)
+@Test 
     public void testErrorWeight() {
-        System.out.println("Test: testErrorWeight()");
-        bag.add(item1);
-        bag.add(item2);
-        bag.add(item3);
+        System.out.println("Test: testErrorWeight");
         Container bag1 = new Bag("Мешок2", 12, 2f);
-        bag.add(bag1);
         Item item5 = new Item("Плитка5", "Плоская", 2);
         Item item6 = new Item("Плитка6", "Плоская", 2);
         Item item7 = new Item("Плитка7", "Плоская", 2);
         Item item8 = new Item("Плитка8", "Плоская", 2);
-        Item item9 = new Item("Плитка9", "Плоская", 2);
-        bag1.add(item5);
-        bag1.add(item6);
-        bag1.add(item7);
-        bag1.add(item8);
-        bag1.add(item9);
-       
+        Item item9 = new Item("Плитка9", "Плоская", 21);
+        try {
+            bag.add(item1);
+            bag.add(item2);
+            bag.add(item3);//6
+            bag1.add(item5);
+            bag1.add(item6);
+            bag1.add(item7);
+            bag1.add(item8);
+            bag1.add(item9);//12
+            bag.add(bag1);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            assertTrue(bag.getWeight() == 6.2f);
+        }
+
     }
 }

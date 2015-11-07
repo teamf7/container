@@ -12,61 +12,54 @@ import java.util.NoSuchElementException;
 /**
  * Мешок
  */
-public abstract class Container extends Things {
+public abstract class Container extends Things implements ContainerImpl{
 
-    private final List items = new ArrayList<>();
-    private float maxWeight = 0;
+    private final List<Things> items = new ArrayList<>();
 
-    public Container(String name, float maxWeight, float weight) {
+
+    public Container(String name, float weight) {
         setName(name);
         setWeight(weight);
-        this.maxWeight = maxWeight;
         setSelected(false);
     }
 
     //добавить предмет
+    @Override
     public void add(Things item) throws RuntimeException {
         if (item.isSelected()) {
-            throw new ArrayStoreException("Предмет не возможно положить, он лежит в другом контейнере");
-        } else if (items.isEmpty() || isHaveWeight()) {
-            item.setSelected(true);
-            if(item instanceof Container){
-                ((Container)item).setMaxWeight(maxWeight-getWeight()-item.getWeight());
-            }
-            items.add(item);
+            throw new ArrayStoreException();
+        } else if (this instanceof Container && this.isSelected()) {
+            throw new UnsupportedOperationException();
+        }else if(this.equals(item)){
+            throw new ClassCastException();      
         } else {
-            throw new ArrayIndexOutOfBoundsException("Выход индекса за пределы границ массива");
+            item.setSelected(true);
+            items.add(item);
         }
-
     }
-
-    //получить предмет
-    public Item get() {
+    
+    //получить предмет по номеру 
+    public Things get(int i) {
         if (items.isEmpty()) {
             throw new NoSuchElementException();
         }
-        int random = (int) (Math.random() * items.size());
-        Item item = (Item) items.get(random);
-        item.setSelected(false);
-        items.remove(item);
-        return item;
+        return (Things) items.get(i);
     }
 
-    //получить предмет
-    public Item get(int i) {
-        return (Item) items.get(i);
+    //удалить предмет предмет
+
+    public void remove(Things item) {
+        item.setSelected(false);
+        items.remove(item);
     }
 
     //получить вес контейнера
+
     @Override
     public float getWeight() {
         float weight = super.getWeight();
-        for (Object item : items) {
-            if (item instanceof Container) {
-                weight += ((Container) item).getWeight();
-            } else {
-                weight += ((Item) item).getWeight();
-            }
+        for (Things item : items) {
+            weight += item.getWeight();
         }
         return weight;
     }
@@ -83,16 +76,6 @@ public abstract class Container extends Things {
             items.remove(i);
         }
     }
-
-    public boolean isHaveWeight() {
-        return maxWeight >= getWeight();
-    }
-
-    /**
-     * @param maxWeight the maxWeight to set
-     */
-    public void setMaxWeight(float maxWeight) {
-        this.maxWeight = maxWeight;
-    }
-
+   
+   
 }

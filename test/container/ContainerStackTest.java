@@ -30,24 +30,32 @@ public class ContainerStackTest {
       @Test
     public void testAddCorrect() {
         System.out.println("Test: testAddCorrect()");
-        Item item1 = new Item("",type,1);
-        Item item2 = new Item("",type,1);
-        Item item3 = new Item("",type,1);
-        Item item4 = new Item("",type,1);
-        Item item5 = new Item("",type,1);
-        Stack stack1 = new Stack("Стопка1",5);//стопка из 5 предметов
+        Item item1 = new Item("Книга 1", type, 1);
+        Item item2 = new Item("Книга 2", type, 1);
+        Item item3 = new Item("Книга 3", type, 1);
+        Item item4 = new Item("Книга 4", type, 1);
+        Item item5 = new Item("Книга 5", type, 1);
+        Stack stack1 = new Stack("Стопка1", 6);//стопка из 5 предметов
         stack1.add(item1);
         stack1.add(item2);
         stack1.add(item3);
         stack1.add(item4);
         stack1.add(item5);
+        try {
+            stack1.add(item1);
+            stack1.add(stack1);
+        } catch (RuntimeException e) {
+            System.out.println(e.toString());
+        }
+        assertTrue(item5.equals(stack1.get()));
     }
-         @Test (expected = ArrayStoreException.class)
+    
+    @Test(expected = ArrayStoreException.class)
     public void testAddAllTpeItem() {
         System.out.println("Test: testAddAllTpeItem()");
-        Item item1 = new Item("",type,1);
-        Item item2 = new Item("Барби","игрушка",1);
-        Stack stack1 = new Stack("Стопка1",5);//стопка из 5 предметов
+        Item item1 = new Item("", type, 1);
+        Item item2 = new Item("Барби", "игрушка", 1);
+        Stack stack1 = new Stack("Стопка1", 5);//стопка из 5 предметов
         stack1.add(item1);
         stack1.add(item2);
     }
@@ -68,6 +76,7 @@ public class ContainerStackTest {
         stack1.add(item4);
         stack1.add(item5);
         stack1.add(item6); 
+        assertTrue(stack1.getTop()==-1);
     }
 
     /**
