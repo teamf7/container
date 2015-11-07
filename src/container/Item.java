@@ -16,5 +16,8 @@ public class Item extends Things{
         setWeight(weight);
         setType(type);
     }
-    
+     @Override
+    public String toString(){
+         return "Имя предмета: "+getName()+" Вес предмета: "+getWeight()+" Тип предмета: "+getType();
+    }
 }

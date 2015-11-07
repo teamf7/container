@@ -77,5 +77,8 @@ public abstract class Container extends Things implements ContainerImpl{
         }
     }
    
-   
+    @Override
+    public String toString() {
+        return "Контейнер: " + getName() + " Вес с предметами: " + getWeight() + " Тип предмета: " + getType();
+    }
 }
